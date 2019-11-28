@@ -80,10 +80,10 @@ class Visualisation:
                     if mouseY > self.scaled_margin and mouseY < self.scaled_margin + self.simulator.get_world().height * self.scaled_margin:
                         x = floor((mouseX - self.scaled_margin) / self.scaled_margin)
                         y = floor((mouseY - self.scaled_margin) / self.scaled_margin)
-                        oldValue = self.simulator.get_world().get(x, y)
+                        oldValue = self.simulator.get_world().get_state(x, y)
                         newValue = (oldValue + 1) % 9
                         if self.editable:
-                            self.simulator.get_world().set(x, y, newValue)
+                            self.simulator.get_world().set_state(x, y, newValue)
                 if mouseX > self.size[0] - panelWidth + margin and mouseX < self.size[0] - margin:
                     if mouseY > margin*3 and mouseY < margin*3+buttonHeight:
                         self.editable = False
@@ -112,7 +112,7 @@ class Visualisation:
         # Draw the cells
         for y in range(self.simulator.get_world().height):
             for x in range(self.simulator.get_world().width):
-                pygame.draw.rect(self.surface, rainbow[self.simulator.get_world().get(x,y)], ((x+1) * self.scaled_margin, (y + 1) * self.scaled_margin, self.scaled_margin, self.scaled_margin))
+                pygame.draw.rect(self.surface, rainbow[self.simulator.get_world().get_state(x,y)], ((x+1) * self.scaled_margin, (y + 1) * self.scaled_margin, self.scaled_margin, self.scaled_margin))
         # Draw vertical lines
         for y in range(self.simulator.get_world().height+1):
             pygame.draw.line(self.surface, black, (self.scaled_margin, (y + 1) * self.scaled_margin), ((self.simulator.get_world().width + 1) * self.scaled_margin, (y + 1) * self.scaled_margin))

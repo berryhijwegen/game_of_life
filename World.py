@@ -20,7 +20,7 @@ class World:
             self.height = width
         self.world = np.zeros((self.height, self.width), dtype=int)
 
-    def get(self, x: int, y: int) -> int:
+    def get_state(self, x: int, y: int) -> int:
         """
         Returns the value on location ``(x, y)`` in the world.
 
@@ -32,7 +32,7 @@ class World:
             return -1
         return self.world[y][x]
 
-    def set(self, x: int, y: int, value:int = 1) -> None:
+    def set_state(self, x: int, y: int, value:int = 1) -> None:
         """
         Sets the state of ``(x, y)`` to the given value.
 
