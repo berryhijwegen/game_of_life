@@ -7,7 +7,7 @@ VISUALISATION=True
 
 if __name__ == "__main__":
     w = World(110)
-    sim = Simulator(w, 'B3/S23')
+    sim = Simulator(w, 'B3/S23/A5', age=True)
 
     if VISUALISATION:
         vis = Visualisation(sim)

@@ -68,5 +68,7 @@ class World:
             print()
             print('-'*self.width*4)
 
-    def get_number_of_alive_neighbours(self, x:int, y:int) -> int:
+    def get_number_of_alive_neighbours(self, x:int, y:int, age=False, max_val=6) -> int:
+        if age:
+            return len([1 for x in self.get_neighbours(x,y) if x >= 2 and x <= max_val-2])
         return len([1 for x in self.get_neighbours(x,y) if x >= 1])
