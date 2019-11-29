@@ -46,7 +46,7 @@ class TestSimulator(unittest.TestCase):
         self.assertIs(self.sim.get_world(), world)
 
     def test_update_cell(self):
-        # using default "B3/S23"
+        # using default "B3/S23/A5"
 
         # check if birth, survival numbers are valid
         [self.assertLessEqual(num, 8) and self.assertGreaterEqual(num,0) for num in self.sim.birth]
@@ -61,7 +61,7 @@ class TestSimulator(unittest.TestCase):
             cases[num] = 'unchanged'
         
         for num in self.sim.birth:
-            cases[num] = '1'
+            cases[num] = 'birth'
 
 
         for number in cases.keys():
@@ -69,19 +69,26 @@ class TestSimulator(unittest.TestCase):
             count = 0
 
             for cell in cells_around_test_cell:
-                self.sim.world.set_state(*cell,1)
+                self.sim.world.set_state(*cell,1 if not self.sim.age else self.sim.age - 2)
                 count+=1
                 if count == number:
                     if cases[number] == 'unchanged':
                         prev = self.sim.world.get_state(*test_cell)
                         self.sim.update_cell(*test_cell)
                         self.assertEqual(self.sim.world.get_state(*test_cell), prev)
-                    elif cases[number] == '1':
+                    elif cases[number] == 'birth':
                         self.sim.update_cell(*test_cell)
-                        self.assertEqual(self.sim.world.get_state(*test_cell), 1)
+                        if self.sim.age:
+                            self.assertEqual(self.sim.world.get_state(*test_cell), self.sim.age)
+                        else:
+                            self.assertEqual(self.sim.world.get_state(*test_cell), 1)
                     else:
+                        prev = self.sim.world.get_state(*test_cell)
                         self.sim.update_cell(*test_cell)
-                        self.assertEqual(self.sim.world.get_state(*test_cell), 0)
+                        if self.sim.age:
+                            self.assertEqual(self.sim.world.get_state(*test_cell), prev-1)
+                        else:
+                            self.assertEqual(self.sim.world.get_state(*test_cell), 0)
                     break
 
 if __name__ == '__main__':
