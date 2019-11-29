@@ -18,10 +18,10 @@ class TestWorld(TestCase):
         Tests setting value on location (x,y).
         """
         x, y = 4, 6
-        self.world.set(x, y)
+        self.world.set_state(x, y)
         self.assertEqual(self.world.world[y][x], 1)
         value = 7
-        self.world.set(x, y, 7)
+        self.world.set_state(x, y, 7)
         self.assertEqual(self.world.world[y][x], 7)
 
     def test_get(self):
@@ -31,7 +31,7 @@ class TestWorld(TestCase):
         x, y = 3, 5
         value = 3
         self.world.world[y][x] = 3
-        self.assertEqual(self.world.get(x, y), value)
+        self.assertEqual(self.world.get_state(x, y), value)
 
     def test_get_neighbours(self):
         """
@@ -39,7 +39,7 @@ class TestWorld(TestCase):
         """
         x, y = 2, 0
         value = 4
-        self.world.set(x, self.height-1, value)
+        self.world.set_state(x, self.height-1, value)
         neighbours = self.world.get_neighbours(x, y)
         self.assertEqual(8, len(neighbours))
         self.assertIn(value, neighbours)

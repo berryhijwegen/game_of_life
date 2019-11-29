@@ -46,51 +46,40 @@ class TestSimulator(unittest.TestCase):
         self.assertIs(self.sim.get_world(), world)
 
     def test_update_cell(self):
-        # alive neighbours == 3
-        self.sim.world.set_state(0,0,1)
-        self.sim.world.set_state(0,1,1)
-        self.sim.world.set_state(1,0,1)
+        # using default "B3/S23"
 
-        self.sim.update_cell(1,1)
-
-        self.assertEqual(self.sim.world.get_state(1,1), 1)
-        # --------------------
+        # check if birth, survival numbers are valid
+        [self.assertLessEqual(num, 8) and self.assertGreaterEqual(num,0) for num in self.sim.birth]
+        [self.assertLessEqual(num, 8) and self.assertGreaterEqual(num,0) for num in self.sim.survival]
         
-        self.setUp()
+        test_cell = [1,1]
+        cells_around_test_cell = [[0,0],[0,1],[0,2],[1,0],[1,2],[2,0],[2,1],[2,2]]
 
-        # alive neighbours < 2
-        self.sim.world.set_state(0,0,1)
-        self.sim.update_cell(0,0)
-
-        self.assertEqual(self.sim.world.get_state(0,0), 0)
-        # --------------------
+        cases = {}
+                
+        for num in self.sim.survival:
+            cases[num] = 'unchanged'
         
-        self.setUp()
+        for num in self.sim.birth:
+            cases[num] = '1'
 
-        # alive neighbours > 3
-        self.sim.world.set_state(0,0,1)
-        self.sim.world.set_state(0,1,1)
-        self.sim.world.set_state(0,2,1)
-        self.sim.world.set_state(1,0,1)
-        self.sim.world.set_state(1,1,1)
 
-        self.sim.update_cell(1,1)
+        for number in cases.keys():
+            self.setUp()
+            count = 0
 
-        self.assertEqual(self.sim.world.get_state(1,1), 0)
-
-        # --------------------
-
-        self.setUp()
-
-        # alive neighbours == 2
-        self.sim.world.set_state(0,0,1)
-        self.sim.world.set_state(0,1,1)
-
-        prev_state = self.sim.world.get_state(1,1)
-
-        self.sim.update_cell(1,0)
-
-        self.assertEqual(self.sim.world.get_state(1,1), prev_state)
+            for cell in cells_around_test_cell:
+                self.sim.world.set_state(*cell,1)
+                count+=1
+                if count == number:
+                    if cases[number] == 'unchanged':
+                        prev = self.sim.world.get_state(*test_cell)
+                        self.sim.update_cell(*test_cell)
+                        self.assertEqual(self.sim.world.get_state(*test_cell), prev)
+                    else:
+                        self.sim.update_cell(*test_cell)
+                        self.assertEqual(self.sim.world.get_state(*test_cell), 1)
+                    break
 
 if __name__ == '__main__':
     unittest.main()
