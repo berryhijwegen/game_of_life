@@ -67,3 +67,6 @@ class World:
                 print(column, end=" | ")
             print()
             print('-'*self.width*4)
+
+    def get_number_of_alive_neighbours(self, x:int, y:int) -> int:
+        return len([1 for x in self.get_neighbours(x,y) if x >= 1])

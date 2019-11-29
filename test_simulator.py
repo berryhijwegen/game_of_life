@@ -1,8 +1,8 @@
-from unittest import TestCase
+import unittest
 from Simulator import *
 
 
-class TestSimulator(TestCase):
+class TestSimulator(unittest.TestCase):
     """
     Tests for ``Simulator`` implementation.
     """
@@ -51,7 +51,7 @@ class TestSimulator(TestCase):
         self.sim.world.set_state(0,1,1)
         self.sim.world.set_state(1,0,1)
 
-        self.sim.world.update_cell(1,1)
+        self.sim.update_cell(1,1)
 
         self.assertEqual(self.sim.world.get_state(1,1), 1)
         # --------------------
@@ -60,7 +60,7 @@ class TestSimulator(TestCase):
 
         # alive neighbours < 2
         self.sim.world.set_state(0,0,1)
-        self.sim.world.update_cell(0,0)
+        self.sim.update_cell(0,0)
 
         self.assertEqual(self.sim.world.get_state(0,0), 0)
         # --------------------
@@ -74,7 +74,7 @@ class TestSimulator(TestCase):
         self.sim.world.set_state(1,0,1)
         self.sim.world.set_state(1,1,1)
 
-        self.sim.world.update_cell(1,1)
+        self.sim.update_cell(1,1)
 
         self.assertEqual(self.sim.world.get_state(1,1), 0)
 
@@ -88,6 +88,9 @@ class TestSimulator(TestCase):
 
         prev_state = self.sim.world.get_state(1,1)
 
-        self.sim.world.update_cell(1,0)
+        self.sim.update_cell(1,0)
 
-        self.assertEqual(self.sim.world.update_cell(1,0), prev_state)
+        self.assertEqual(self.sim.world.get_state(1,1), prev_state)
+
+if __name__ == '__main__':
+    unittest.main()
