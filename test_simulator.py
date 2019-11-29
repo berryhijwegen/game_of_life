@@ -76,9 +76,12 @@ class TestSimulator(unittest.TestCase):
                         prev = self.sim.world.get_state(*test_cell)
                         self.sim.update_cell(*test_cell)
                         self.assertEqual(self.sim.world.get_state(*test_cell), prev)
-                    else:
+                    elif cases[number] == '1':
                         self.sim.update_cell(*test_cell)
                         self.assertEqual(self.sim.world.get_state(*test_cell), 1)
+                    else:
+                        self.sim.update_cell(*test_cell)
+                        self.assertEqual(self.sim.world.get_state(*test_cell), 0)
                     break
 
 if __name__ == '__main__':
