@@ -1,4 +1,5 @@
 from World import *
+import re
 
 class Simulator:
     """
@@ -6,7 +7,7 @@ class Simulator:
     Read https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life for an introduction to Conway's Game of Life.
     """
 
-    def __init__(self, world = None):
+    def __init__(self, world = None, rule_string="B3/S23"):
         """
         Constructor for Game of Life simulator.
 
@@ -17,6 +18,13 @@ class Simulator:
             self.world = World(20)
         else:
             self.world = world
+
+        self.read_rule_string(rule_string)
+        print(self.birth, self.survival)
+
+    def read_rule_string(self, rule_string):
+        self.birth = [int(char) for char in re.search(r'(?<=\B)(.*?)(?=\/)', rule_string).group(0)]
+        self.survival = [int(char) for char in re.search(r"S(\d+)", rule_string).group(0)[1:]]
 
     def update(self) -> World:
         """
@@ -72,8 +80,8 @@ class Simulator:
         alive_neighbours_n = self.world.get_number_of_alive_neighbours(row,column)
         alive = True if self.world.get_state(row,column) >= 1 else False
 
-        if alive and (alive_neighbours_n < 2 or alive_neighbours_n > 3):
-            self.world.set_state(row, column, 0)
-
-        if not alive and alive_neighbours_n == 3:
+        if not alive and alive_neighbours_n in self.birth:
             self.world.set_state(row, column, 1)
+
+        elif alive and alive_neighbours_n not in self.survival:
+            self.world.set_state(row, column, 0)
